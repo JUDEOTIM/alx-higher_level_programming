@@ -1,0 +1,124 @@
+=================================
+How to use 5-text_indentation.txt
+=================================
+
+This module defines a text-indentation function ``text_indentation(text)``.
+
+==========
+TEST CASES
+==========
+
+Text is printed with two new lines after each of the characters ``.``, ``?``, and ``:``.
+
+Operations with strings
+-----------------------
+
+    ::
+
+    >>> text_indentation = __import__('5-text_indentation').text_indentation
+    >>> text_indentation("Hi there:")
+    Hi there:
+    <BLANKLINE>
+
+No spaces at the beginning of a printed line.
+
+::
+
+    >>> text_indentation("         Hello world.")
+    Hello world.
+    <BLANKLINE>
+
+::
+
+    >>> text_indentation("          ")
+
+    $ ./5-main.py | wc -c
+    0
+
+Similarly, no spaces are at the end of a printed line.
+
+::
+
+    >>> text_indentation("Hello.   ")
+    Hello.
+    <BLANKLINE>
+
+::
+
+    >>> text_indentation("    Check.    this out.   ")
+    Check.
+    <BLANKLINE>
+    this out.
+    <BLANKLINE>
+
+New lines are only printed for the characters ``.``, ``?``, and ``:`` -
+text not ending with one of these characters is not ended with a new line.
+
+::
+
+    >>> text_indentation("A good sentence ends with a period")
+    A good sentence ends with a period
+
+Newline characters within a text are printed as normal.
+
+::
+
+    >>> text_indentation("This is a newline character\nYou're welcome.")
+    This is a newline character
+    You're welcome.
+    <BLANKLINE>
+
+::
+
+    >>> text_indentation("\n\n\n Multiple new lines, isn't this a good test case?")
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    Multiple new lines, isn't this a good test case?
+    <BLANKLINE>
+
+::
+
+    >>> text_indentation("    Roses are red. Violets are blue:        If you were a newline\n  I'd still find you..")
+    Roses are red.
+    <BLANKLINE>
+    Violets are blue:
+    <BLANKLINE>
+    If you were a newline
+    I'd still find you.
+    <BLANKLINE>
+    .
+    <BLANKLINE>
+
+::
+
+Operation with invalid arguments
+--------------------------------
+
+::
+
+    The paramter ``text`` must be a string. Otherwise, a TypeError is raised.
+
+::
+
+    >>> text_indentation(98)
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+::
+
+    >>> text_indentation(["Hello"])
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+::
+
+    >>> text_indentation(None)
+    Traceback (most recent call last):
+    TypeError: text must be a string
+
+::
+
+    >>> text_indentation()
+    Traceback (most recent call last):
+    TypeError: text_indentation() missing 1 required positional argument: 'text'
