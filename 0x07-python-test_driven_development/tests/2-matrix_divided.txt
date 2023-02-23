@@ -1,0 +1,69 @@
+The ``matrix_divided`` module
+======================
+
+Using ``matrix_divided``
+------------------------------
+
+This is an example text file in reStructuredText format.  First import
+``matrix_divided`` from the ``matrix_divided`` module:
+
+import:
+    >>> matrix_divided = __import__('2-matrix_divided').matrix_divided
+
+Now use it:
+
+>>> matrix = [[3, 3, 3],[3, 3, 3]]
+>>> print(matrix_divided(matrix, 3))
+[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+
+
+>>> matrix = [[3, 3],[3, 3, 3]]
+>>> print(matrix_divided(matrix, 3))
+Traceback (most recent call last):
+    ...
+TypeError: Each row of the matrix must have the same size
+
+>>> matrix = [[3, 3, 3],[3, 3, 3]]
+>>> print(matrix_divided(matrix, 0))
+Traceback (most recent call last):
+    ...
+ZeroDivisionError: division by zero
+
+>>> print(matrix_divided(matrix, "Ayo"))
+Traceback (most recent call last):
+    ...
+TypeError: div must be a number
+
+>>> print(matrix_divided(matrix, True))
+Traceback (most recent call last):
+    ...
+TypeError: div must be a number
+
+>>> empty = []
+
+>>> print(matrix_divided(empty, 4))
+Traceback (most recent call last):
+    ...
+TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+
+>>> matrix = [[3, "Ayo", 3],[3, 3, 3]]
+>>> print(matrix_divided(empty, 4))
+Traceback (most recent call last):
+    ...
+TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+
+>>> matrix = [[3, 3, 3],[3, 3, 3]]
+>>> print(matrix_divided(matrix, float('inf')))
+[[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
+
+>>> print(matrix_divided(matrix))
+Traceback (most recent call last):
+    ...
+TypeError: matrix_divided() missing 1 required positional argument: 'div'
+
+>>> print(matrix_divided())
+Traceback (most recent call last):
+    ...
+TypeError: matrix_divided() missing 2 required positional arguments: 'matrix' and 'div'
