@@ -1,5 +1,13 @@
 #!/usr/bin/python3
 
+""" Base Module
+"""
+from typing import Optional
+import json
+import csv
+import turtle as t
+# import tkinter as tk
+
 """Defines a base model class."""
 import json
 import csv

@@ -151,7 +151,39 @@ class Rectangle(Base):
 
     def __str__(self):
         """Return the print() and str() representation of the Rectangle."""
-        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id,
-                                                       self.x, self.y,
-                                                       self.width, self.height)
+        return "[Rectangle] ({}) {}/{} - {}/{}"\
+            .format(self.id, self.x, self.y, self.width, self.height)
 
+    def update(self, *args, **kwargs) -> None:
+        """ Update rectangle
+        Args:
+            *args: tuple of args
+            **kwargs: keywords args, key and value arguments
+        """
+        if len(args) != 0:
+            count = 0
+            for arg in args:
+                if count == 0:
+                    self.id = arg
+                elif count == 1:
+                    self.width = arg
+                elif count == 2:
+                    self.height = arg
+                elif count == 3:
+                    self.x = arg
+                elif count == 4:
+                    self.y = arg
+                count += 1
+
+        elif len(kwargs) != 0:
+            for k, v in kwargs.items():
+                setattr(self, k, v)
+
+    def to_dictionary(self) -> dict:
+        """ Details to dict
+        Returns:
+            dict: Dictionary of attr
+        """
+        dico = dict(id=self.id, width=self.width,
+                    height=self.height, x=self.x, y=self.y)
+        return dico
