@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 """ Base Module
 """
 from typing import Optional
@@ -8,25 +7,20 @@ import csv
 import turtle as t
 # import tkinter as tk
 
-"""Defines a base model class."""
-import json
-import csv
-import turtle
-
 
 class Base:
-    """Base model.
-    This Represents the "base" for all other classes in project 0x0C*.
-    Private Class Attributes:
-        __nb_object (int): Number of instantiated Bases.
+
+    """Base Class
+    Attributes:
+        id (int): id attr
     """
 
     __nb_objects = 0
 
-    def __init__(self, id=None):
-        """Initialize a new Base.
+    def __init__(self, id: Optional[int] = None) -> None:
+        """ instance init function
         Args:
-            id (int): The identity of the new Base.
+            id (Optional[int], optional): parsed id arg
         """
         if id is not None:
             self.id = id
@@ -36,9 +30,11 @@ class Base:
 
     @staticmethod
     def to_json_string(list_dictionaries):
-        """Return the JSON serialization of a list of dicts.
+        """ Converts dicts to json to the data
         Args:
-            list_dictionaries (list): A list of dictionaries.
+            list_dictionaries (list): list of dicos
+        Returns:
+            json: dumped json
         """
         if list_dictionaries is None or list_dictionaries == []:
             return "[]"
@@ -46,26 +42,27 @@ class Base:
 
     @classmethod
     def save_to_file(cls, list_objs):
-        """Write the JSON serialization of a list of objects to a file.
+        """ Save json to file
         Args:
-            list_objs (list): A list of inherited Base instances.
+            list_objs (list): List of objects
         """
-        filename = cls.__name__ + ".json"
-        with open(filename, "w") as jsonfile:
+        filename = cls.__name__+".json"
+        with open(filename, mode="w") as file:
             if list_objs is None:
-                jsonfile.write("[]")
+                file.write("[]")
             else:
-                list_dicts = [o.to_dictionary() for o in list_objs]
-                jsonfile.write(Base.to_json_string(list_dicts))
+                dict_list = []
+                for obj in list_objs:
+                    dict_list.append(obj.to_dictionary())
+                file.write(Base.to_json_string(dict_list))
 
     @staticmethod
     def from_json_string(json_string):
-        """Return the deserialization of a JSON string.
+        """ load from json string
         Args:
-            json_string (str): A JSON str representation of a list of dicts.
+            json_string (dict strin): Description
         Returns:
-            If json_string is None or empty - an empty list.
-            Otherwise - the Python list represented by json_string.
+            json: Retreived dict
         """
         if json_string is None or json_string == "[]":
             return []
@@ -73,88 +70,87 @@ class Base:
 
     @classmethod
     def create(cls, **dictionary):
-        """Return a class instantied from a dictionary of attributes.
+        """ create new instance dictionary
         Args:
-            **dictionary (dict): Key/value pairs of attributes to initialize.
+            **dictionary: dictionary
+        Returns:
+            dict: new instance dict
         """
-        if dictionary and dictionary != {}:
+        if dictionary != {}:
             if cls.__name__ == "Rectangle":
-                new = cls(1, 1)
+                new_instance = cls(2, 3)
             else:
-                new = cls(1)
-            new.update(**dictionary)
-            return new
+                new_instance = cls(2)
+            new_instance.update(**dictionary)
+            return new_instance
 
     @classmethod
     def load_from_file(cls):
-        """Return a list of classes instantiated from a file of JSON strings.
-        Reads from `<cls.__name__>.json`.
+        """ Load from file
         Returns:
-            If the file does not exist - an empty list.
-            Otherwise - a list of instantiated classes.
+            list: list of dict
         """
-        filename = str(cls.__name__) + ".json"
+        filename = cls.__name__ + ".json"
         try:
-            with open(filename, "r") as jsonfile:
-                list_dicts = Base.from_json_string(jsonfile.read())
-                return [cls.create(**d) for d in list_dicts]
+            with open(filename, mode="r") as file:
+                dict_list = Base.from_json_string(file.read())
+                return [cls.create(**item) for item in dict_list]
         except IOError:
             return []
 
     @classmethod
     def save_to_file_csv(cls, list_objs):
-        """Write the CSV serialization of a list of objects to a file.
+        """ save file to csv
         Args:
-            list_objs (list): A list of inherited Base instances.
+            list_objs (list): List of dicos
         """
         filename = cls.__name__ + ".csv"
-        with open(filename, "w", newline="") as csvfile:
+        with open(filename, "w", newline="") as file:
             if list_objs is None or list_objs == []:
-                csvfile.write("[]")
+                file.write("[]")
             else:
                 if cls.__name__ == "Rectangle":
                     fieldnames = ["id", "width", "height", "x", "y"]
                 else:
                     fieldnames = ["id", "size", "x", "y"]
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                for obj in list_objs:
-                    writer.writerow(obj.to_dictionary())
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                [writer.writerow(obj.to_dictionary()) for obj in list_objs]
+                # for obj in list_objs:
+                #     writer.writerow(obj.to_dictionary())
 
     @classmethod
     def load_from_file_csv(cls):
-        """Return a list of classes instantiated from a CSV file.
-        Reads from `<cls.__name__>.csv`.
+        """ load from csv file
         Returns:
-            If the file does not exist - an empty list.
-            Otherwise - a list of instantiated classes.
+            list: List of new object diction instance
         """
         filename = cls.__name__ + ".csv"
         try:
-            with open(filename, "r", newline="") as csvfile:
+            with open(filename, "r", newline="") as file:
                 if cls.__name__ == "Rectangle":
                     fieldnames = ["id", "width", "height", "x", "y"]
                 else:
                     fieldnames = ["id", "size", "x", "y"]
-                list_dicts = csv.DictReader(csvfile, fieldnames=fieldnames)
-                list_dicts = [dict([k, int(v)] for k, v in d.items())
-                              for d in list_dicts]
-                return [cls.create(**d) for d in list_dicts]
+                dict_list = csv.DictReader(file, fieldnames=fieldnames)
+                dict_list = [dict([k, int(v)] for k, v in d.items())
+                             for d in dict_list]
+                return [cls.create(**dic) for dic in dict_list]
         except IOError:
             return []
 
     @staticmethod
     def draw(list_rectangles, list_squares):
-        """Draw Rectangles and Squares using the turtle module.
+        """ Draws the shapes
         Args:
-            list_rectangles (list): A list of Rectangle objects to draw.
-            list_squares (list): A list of Square objects to draw.
+            list_rectangles (list): List of rectangle object
+            list_squares (list): List of square object
         """
-        turt = turtle.Turtle()
-        turt.screen.bgcolor("#b7312c")
-        turt.pensize(3)
+        turt = t.Turtle()
+        turt.screen.bgcolor("black")
+        turt.pensize(4)
         turt.shape("turtle")
 
-        turt.color("#ffffff")
+        turt.color("yellow")
         for rect in list_rectangles:
             turt.showturtle()
             turt.up()
@@ -167,7 +163,7 @@ class Base:
                 turt.left(90)
             turt.hideturtle()
 
-        turt.color("#b5e3d8")
+        turt.color("blue")
         for sq in list_squares:
             turt.showturtle()
             turt.up()
@@ -180,4 +176,4 @@ class Base:
                 turt.left(90)
             turt.hideturtle()
 
-        turtle.exitonclick()
+
